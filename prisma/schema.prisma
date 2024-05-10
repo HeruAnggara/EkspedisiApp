@@ -36,11 +36,11 @@ model Level {
 model JenisPengeluaran {
   id               String @id @default(uuid())
   jenisPengeluaran String @db.VarChar(255)
-  keterangan       String @db.VarChar(255)
+  keterangan       String? @db.VarChar(255)
 }
 
 model Perlengkapan {
   id               String @id @default(uuid())
   namaPerlengkapan String @db.VarChar(255)
-  keterangan       String @db.VarChar(255)
+  keterangan       String? @db.VarChar(255)
 }
