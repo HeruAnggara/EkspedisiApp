@@ -34,13 +34,24 @@ model Level {
 }
 
 model JenisPengeluaran {
-  id               String @id @default(uuid())
-  jenisPengeluaran String @db.VarChar(255)
+  id               String  @id @default(uuid())
+  jenisPengeluaran String  @db.VarChar(255)
   keterangan       String? @db.VarChar(255)
 }
 
 model Perlengkapan {
-  id               String @id @default(uuid())
-  namaPerlengkapan String @db.VarChar(255)
+  id               String  @id @default(uuid())
+  namaPerlengkapan String  @db.VarChar(255)
   keterangan       String? @db.VarChar(255)
+}
+
+model Supplier {
+  id               String   @id @default(uuid())
+  namaSupplier     String   @db.VarChar(255)
+  keteranganBarang String?  @db.VarChar(255)
+  harga            Int
+  jumlahBarang     Int
+  nomorHp          String   @db.VarChar(255)
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt() @db.Timestamp(6)
 }
