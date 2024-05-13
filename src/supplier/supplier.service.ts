@@ -64,7 +64,7 @@ export class SupplierService {
 
             return {
                 statusCode: HttpStatus.OK,
-                message: `Data Suppplier Dengan nama ${detail.namaSupplier} Berhasil Diperbarui`
+                message: `Data Supplier Dengan nama ${detail.namaSupplier} Berhasil Diperbarui`
             }
         } catch (error) {
             return {
@@ -84,7 +84,7 @@ export class SupplierService {
 
             return {
                 statusCode: HttpStatus.OK,
-                message: `Data Suppplier Dengan nama ${detail.namaSupplier} Berhasil Dihapus`
+                message: `Data Supplier Dengan nama ${detail.namaSupplier} Berhasil Dihapus`
             }
         } catch (error) {
             return {
@@ -100,7 +100,7 @@ export class SupplierService {
         try {
             return {
                 statusCode: HttpStatus.BAD_REQUEST,
-                message: 'Detail Data Suppplier Dengan nama ${detail.namaSupplier}',
+                message: 'Detail Data Supplier Dengan nama ${detail.namaSupplier}',
                 data: data
             }
         } catch (error) {
