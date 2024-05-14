@@ -34,9 +34,10 @@ model Level {
 }
 
 model JenisPengeluaran {
-  id               String  @id @default(uuid())
-  jenisPengeluaran String  @db.VarChar(255)
-  keterangan       String? @db.VarChar(255)
+  DaftarPengeluaran DaftarPengeluaran[]
+  id                String              @id @default(uuid())
+  jenisPengeluaran  String              @db.VarChar(255)
+  keterangan        String?             @db.VarChar(255)
 }
 
 model Perlengkapan {
@@ -54,4 +55,27 @@ model Supplier {
   nomorHp          String   @db.VarChar(255)
   created_at       DateTime @default(now())
   updated_at       DateTime @updatedAt() @db.Timestamp(6)
+}
+
+model DaftarPengeluaran {
+  id                String           @id @default(uuid())
+  tglPengeluaran    DateTime         @db.Date()
+  keterangan        String?          @db.VarChar(255)
+  jumlahPembayaran  Int
+  yangMembayar      String           @db.VarChar(255)
+  yangMenerima      String           @db.VarChar(255)
+  metodePembayaran  MetodePembayaran
+  buktiPembayaran   String?          @db.VarChar(255)
+  // statusPengeluaran: 1 = Disetujui, 2 = Pending
+  statusPengeluaran Int              @default(2)
+  jenisPengeluaran  String
+  JenisPengeluaran  JenisPengeluaran @relation(fields: [jenisPengeluaran], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  created_at        DateTime         @default(now())
+  updated_at        DateTime         @updatedAt() @db.Timestamp(6)
+}
+
+enum MetodePembayaran {
+  Tunai
+  Transfer
+  Kartu_Kredit
 }
