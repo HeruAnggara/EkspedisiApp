@@ -10,13 +10,13 @@ export class DaftarPengeluaranController {
     @UseGuards(JwtAuthGuard)
     @Post()
     async create(@Body() data: DaftarPengeluaranDto, @Req() req) {
-        const userId = req.user.sub;
+        const userId = req.user.userId;
         return await this.daftarPengeluaran.create(data, userId);
     }
     
     @UseGuards(JwtAuthGuard)
     @Get()
-    async read() {
+    async read(@Req() req) {
         return await this.daftarPengeluaran.read();
     }
 
