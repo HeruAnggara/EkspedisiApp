@@ -107,3 +107,16 @@ model PembelianPerlengkapan {
   created_at       DateTime     @default(now())
   updated_at       DateTime     @updatedAt() @db.Timestamp(6)
 }
+
+model Customer {
+  id          String   @id @default(uuid())
+  nama        String   @db.VarChar(255)
+  noWa        String   @unique @db.VarChar(255)
+  email       String   @unique @db.VarChar(255)
+  alamat      String   @db.VarChar(255)
+  username    String   @db.VarChar(255)
+  limitCredit Int      @default(0)
+  point       Int      @default(0)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt() @db.Timestamp(6)
+}
