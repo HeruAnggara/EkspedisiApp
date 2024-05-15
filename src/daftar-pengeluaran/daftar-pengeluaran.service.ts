@@ -2,7 +2,6 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { DaftarPengeluaranDto } from './dto/daftar-pengeluaran.dto';
 import { MetodePembayaran } from '@prisma/client';
-import { error } from 'console';
 
 @Injectable()
 export class DaftarPengeluaranService {
