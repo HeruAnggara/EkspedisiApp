@@ -41,20 +41,22 @@ model JenisPengeluaran {
 }
 
 model Perlengkapan {
-  id               String  @id @default(uuid())
-  namaPerlengkapan String  @db.VarChar(255)
-  keterangan       String? @db.VarChar(255)
+  PembelianPerlengkapan PembelianPerlengkapan[]
+  id                    String                  @id @default(uuid())
+  namaPerlengkapan      String                  @db.VarChar(255)
+  keterangan            String?                 @db.VarChar(255)
 }
 
 model Supplier {
-  id               String   @id @default(uuid())
-  namaSupplier     String   @db.VarChar(255)
-  keteranganBarang String?  @db.VarChar(255)
-  harga            Int
-  jumlahBarang     Int
-  nomorHp          String   @db.VarChar(255)
-  created_at       DateTime @default(now())
-  updated_at       DateTime @updatedAt() @db.Timestamp(6)
+  PembelianPerlengkapan PembelianPerlengkapan[]
+  id                    String                  @id @default(uuid())
+  namaSupplier          String                  @db.VarChar(255)
+  keteranganBarang      String?                 @db.VarChar(255)
+  harga                 Int
+  jumlahBarang          Int
+  nomorHp               String                  @db.VarChar(255)
+  created_at            DateTime                @default(now())
+  updated_at            DateTime                @updatedAt() @db.Timestamp(6)
 }
 
 model DaftarPengeluaran {
@@ -89,4 +91,19 @@ model PemasukkanLain {
   komisi           Int
   created_at       DateTime @default(now())
   updated_at       DateTime @updatedAt() @db.Timestamp(6)
+}
+
+model PembelianPerlengkapan {
+  id               String       @id @default(uuid())
+  tanggalPembelian DateTime     @db.Date()
+  idPerlengkapan   String
+  idSupplier       String
+  harga            Int
+  jumlah           Int
+  keterangan       String?      @db.VarChar(255)
+  nota             String?      @db.Text
+  Perlengkapan     Perlengkapan @relation(fields: [idPerlengkapan], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Supplier         Supplier     @relation(fields: [idSupplier], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  created_at       DateTime     @default(now())
+  updated_at       DateTime     @updatedAt() @db.Timestamp(6)
 }
