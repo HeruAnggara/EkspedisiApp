@@ -2,6 +2,7 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { DaftarPengeluaranDto } from './dto/daftar-pengeluaran.dto';
 import { MetodePembayaran } from '@prisma/client';
+import { error } from 'console';
 
 @Injectable()
 export class DaftarPengeluaranService {
@@ -14,22 +15,23 @@ export class DaftarPengeluaranService {
         try {
             await this.prisma.daftarPengeluaran.create({
                 data: {
-                    tglPengeluaran: new Date().toISOString().slice(0, 10),
+                    tglPengeluaran: new Date(),
                     keterangan: data.keterangan,
                     jumlahPembayaran: data.jumlahPembayaran,
                     yangMembayar: user.name,
                     yangMenerima: data.yangMenerima,
                     metodePembayaran: MetodePembayaran[data.metodePembayaran as keyof typeof MetodePembayaran],
                     buktiPembayaran: data.buktiPembayaran,
+                    statusPengeluaran: data.statusPengeluaran,
                     jenisPengeluaran: data.jenisPengeluaran
                 }
             })
 
-            return {
+            return {                
                 statusCode: HttpStatus.CREATED,
                 message: 'Data Daftar Pengeluaran Berhasil Ditambahkan'
             }
-        } catch (error) {
+        } catch (error) {            
             return {
                 statusCode: HttpStatus.BAD_REQUEST,
                 message: error.message
@@ -59,7 +61,6 @@ export class DaftarPengeluaranService {
             await this.prisma.daftarPengeluaran.update({
                 where: { id: id },
                 data: {
-                    tglPengeluaran: new Date().toISOString().slice(0, 10),
                     keterangan: data.keterangan,
                     jumlahPembayaran: data.jumlahPembayaran,
                     yangMenerima: data.yangMenerima,
@@ -86,13 +87,15 @@ export class DaftarPengeluaranService {
         try {
             await this.prisma.daftarPengeluaran.delete({
                 where: { id: id }
-            })
+            });
 
             return {
                 statusCode: HttpStatus.OK,
                 message: 'Data Daftar Pengeluaran Berhasil Dihapus'
             }
         } catch (error) {
+            console.log(error.message);
+
             return {
                 statusCode: HttpStatus.BAD_REQUEST,
                 message: error.message
