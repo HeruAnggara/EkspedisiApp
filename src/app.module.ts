@@ -12,9 +12,10 @@ import { SupplierModule } from './supplier/supplier.module';
 import { DaftarPengeluaranModule } from './daftar-pengeluaran/daftar-pengeluaran.module';
 import { PemasukanLainModule } from './pemasukan-lain/pemasukan-lain.module';
 import { PembelianPerlengkapanModule } from './pembelian-perlengkapan/pembelian-perlengkapan.module';
+import { CustomerModule } from './customer/customer.module';
 
 @Module({
-  imports: [AuthModule, UsersModule, PrismaModule, ProfileModule, JenisPengeluaranModule, PerlengkapanModule, SupplierModule, DaftarPengeluaranModule, PemasukanLainModule, PembelianPerlengkapanModule],
+  imports: [AuthModule, UsersModule, PrismaModule, ProfileModule, JenisPengeluaranModule, PerlengkapanModule, SupplierModule, DaftarPengeluaranModule, PemasukanLainModule, PembelianPerlengkapanModule, CustomerModule],
   controllers: [AppController, UsersController],
   providers: [AppService],
 })
