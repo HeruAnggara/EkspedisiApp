@@ -11,9 +11,10 @@ import { PerlengkapanModule } from './perlengkapan/perlengkapan.module';
 import { SupplierModule } from './supplier/supplier.module';
 import { DaftarPengeluaranModule } from './daftar-pengeluaran/daftar-pengeluaran.module';
 import { PemasukanLainModule } from './pemasukan-lain/pemasukan-lain.module';
+import { PembelianPerlengkapanModule } from './pembelian-perlengkapan/pembelian-perlengkapan.module';
 
 @Module({
-  imports: [AuthModule, UsersModule, PrismaModule, ProfileModule, JenisPengeluaranModule, PerlengkapanModule, SupplierModule, DaftarPengeluaranModule, PemasukanLainModule],
+  imports: [AuthModule, UsersModule, PrismaModule, ProfileModule, JenisPengeluaranModule, PerlengkapanModule, SupplierModule, DaftarPengeluaranModule, PemasukanLainModule, PembelianPerlengkapanModule],
   controllers: [AppController, UsersController],
   providers: [AppService],
 })
