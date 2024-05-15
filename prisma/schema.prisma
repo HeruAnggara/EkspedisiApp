@@ -19,6 +19,7 @@ model User {
   email      String?  @unique @db.VarChar(255)
   no_wa      String   @unique @db.VarChar(255)
   alamat     String   @db.VarChar(255)
+  username   String   @db.VarChar(255) @default("")
   password   String   @db.VarChar(255)
   levelId    Int
   Level      Level    @relation(fields: [levelId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -114,7 +115,7 @@ model Customer {
   noWa        String   @unique @db.VarChar(255)
   email       String   @unique @db.VarChar(255)
   alamat      String   @db.VarChar(255)
-  username    String   @db.VarChar(255)
+  username    String?   @db.VarChar(255)
   limitCredit Int      @default(0)
   point       Int      @default(0)
   created_at  DateTime @default(now())
