@@ -79,3 +79,14 @@ enum MetodePembayaran {
   Transfer
   Kartu_Kredit
 }
+
+model PemasukkanLain {
+  id               String   @id @default(uuid())
+  kategori         String   @db.VarChar(255)
+  namaCustomer     String   @db.VarChar(255)
+  harga            Int
+  tanggalTransaksi DateTime @db.Date()
+  komisi           Int
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt() @db.Timestamp(6)
+}
