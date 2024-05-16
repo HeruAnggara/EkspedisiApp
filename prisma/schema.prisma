@@ -131,7 +131,7 @@ model DataPengiriman {
   namaPenerima String @db.VarChar(255)
   noWaPenerima String @db.VarChar(255)
   kota_tujuan String @db.VarChar(255)
-  beratBarang Decimal @db.Decimal()
+  beratBarang Decimal @db.Decimal(8,2)
   ongkir Int
   komisi Int
   // StatusPembayaran: 1 = Lunas, 2 = Pending
