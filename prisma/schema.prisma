@@ -121,3 +121,49 @@ model Customer {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt() @db.Timestamp(6)
 }
+
+model DataPengiriman {
+  id String @id @default(uuid())
+  noResi String @db.VarChar(255)
+  tglTransaksi DateTime @db.Date()
+  namaPengirim String @db.VarChar(255)
+  noWaPengirim String @db.VarChar(255)
+  namaPenerima String @db.VarChar(255)
+  noWaPenerima String @db.VarChar(255)
+  kota_tujuan String @db.VarChar(255)
+  beratBarang Decimal @db.Decimal()
+  ongkir Int
+  komisi Int
+  // StatusPembayaran: 1 = Lunas, 2 = Pending
+  statusPembayaran Int
+  metodePembayaran MetodePembayaran
+  bank String? @db.VarChar(255)
+  buktiPembayaran String? @db.VarChar(255)
+  jenisPengiriman String
+  JenisPengiriman JenisPengiriman @relation(fields: [jenisPengiriman], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  bawaSendiri Boolean @default(false)
+  statusPengiriman String
+  StatusPengiriman StatusPengiriman @relation(fields: [statusPengiriman], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  keterangan String? @db.VarChar(255)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt() @db.Timestamp(6)
+}
+
+model StatusPengiriman {
+  DataPengiriman DataPengiriman[]
+  id String @id @default(uuid())
+  statusPengiriman String @db.VarChar(255)
+  keterangan String? @db.VarChar(255)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt() @db.Timestamp(6)
+}
+
+model JenisPengiriman {
+  DataPengiriman DataPengiriman[]
+  id String @id @default(uuid())
+  jenisPengiriman String @db.VarChar(255)
+  keterangan String? @db.VarChar(255)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt() @db.Timestamp(6)
+}
+
