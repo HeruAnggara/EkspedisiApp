@@ -16,7 +16,7 @@ export class DaftarPengeluaranController {
     
     @UseGuards(JwtAuthGuard)
     @Get()
-    async read(@Req() req) {
+    async read() {
         return await this.daftarPengeluaran.read();
     }
 
