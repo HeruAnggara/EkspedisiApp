@@ -194,6 +194,8 @@ export class DataPengirimanService {
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         const data = XLSX.utils.sheet_to_json(worksheet);
+
+        await this.validateImportedData(data);
     
         const results = [];
     
@@ -238,5 +240,46 @@ export class DataPengirimanService {
             statusCode: HttpStatus.CREATED,
             message: 'Data Pengiriman Berhasil Diimpor',
         };
+    }
+
+    async validateImportedData(data: any[]) {
+        // Validasi Data Kosong
+        if (data.length === 0) {
+            throw new HttpException('Data Kosong', HttpStatus.BAD_REQUEST);
+        }
+    
+        // Validasi Duplikasi Data
+        const uniqueIds = new Set();
+        for (const item of data) {
+            if (uniqueIds.has(item.id)) {
+                throw new HttpException('Duplikasi Data', HttpStatus.BAD_REQUEST);
+            }
+            uniqueIds.add(item.id);
+        }
+    
+        // Validasi Kolom Metode Pembayaran
+        for (const item of data) {
+            if (item.metodePembayaran !== 'Tunai' && item.metodePembayaran !== 'Transfer') {
+                throw new HttpException('Kolom Metode Pembayaran Harus Tunai / Transfer', HttpStatus.BAD_REQUEST);
+            }
+    
+            // Validasi Kolom Bank
+            if (item.metodePembayaran === 'Transfer' && !item.bank) {
+                throw new HttpException('Kolom Bank Wajib Diisi Jika Metode Pembayaran = Transfer', HttpStatus.BAD_REQUEST);
+            }
+    
+            // Validasi Kolom Bukti Pembayaran
+            if (item.metodePembayaran === 'Transfer' && !item.buktiPembayaran) {
+                throw new HttpException('Kolom Bukti Pembayaran Wajib Diisi Jika Metode Pembayaran = Transfer', HttpStatus.BAD_REQUEST);
+            }
+    
+            if (item.metodePembayaran === 'Tunai' && item.bank) {
+                throw new HttpException('Kolom Bank Wajib Kosong Jika Metode Pembayaran = Tunai', HttpStatus.BAD_REQUEST);
+            }
+    
+            if (item.metodePembayaran === 'Tunai' && item.buktiPembayaran) {
+                throw new HttpException('Kolom Bukti Pembayaran Wajib Kosong Jika Metode Pembayaran = Tunai', HttpStatus.BAD_REQUEST);
+            }
+        }
     }
 }
