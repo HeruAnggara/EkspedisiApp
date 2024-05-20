@@ -1,4 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import * as XLSX from 'xlsx';
+import { Express } from 'express';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { DataPengirimanDto, UpdateDataPengirimanDto } from './dto/data-pengiriman.dto';
 
@@ -185,5 +187,56 @@ export class DataPengirimanService {
                 message: error.message
             }
         }
+    }
+
+    async importExcel(file: Express.Multer.File) {
+        const workbook = XLSX.read(file.buffer, { type: 'buffer' });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const data = XLSX.utils.sheet_to_json(worksheet);
+    
+        const results = [];
+    
+        for (const item of data as any[]) {
+            // const dataPengiriman = new DataPengirimanDto();
+            const jenis = await this.prisma.jenisPengiriman.findFirst({
+                where: { jenisPengiriman: item.jenisPengiriman }
+            });
+            const status = await this.prisma.statusPengiriman.findFirst({
+                where: { statusPengiriman: item.statusPengiriman }
+            });
+            if (!jenis || !status) {
+                throw new HttpException('Jenis atau Status Pengiriman Tidak Ditemukan', HttpStatus.NOT_FOUND);
+            }
+    
+            item.jenisPengiriman = jenis.id;
+            item.statusPengiriman = status.id;
+            item.noWaPengirim = '0' + item.noWaPengirim.toString();
+            item.noWaPenerima = '0' + item.noWaPenerima.toString();
+            item.tglTransaksi = new Date((item.tglTransaksi + 1) * 24 * 60 * 60 * 1000 + new Date('1899-12-30').getTime()).toISOString();
+            item.bawaSendiri = item.bawaSendiri == 'ya';
+            item.statusPembayaran = item.metodePembayaran === 'Tunai' ? 1 : 2;
+    
+            const newData = {
+                ...item
+            };
+    
+            try {
+            
+                const createdData = await this.prisma.dataPengiriman.create({
+                    data: newData
+                });
+                results.push(createdData);
+            } catch (error) {
+                console.log(error.message);
+
+                throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    
+        return {
+            statusCode: HttpStatus.CREATED,
+            message: 'Data Pengiriman Berhasil Diimpor',
+        };
     }
 }

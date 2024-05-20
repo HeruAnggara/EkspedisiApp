@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { DataPengirimanService } from './data-pengiriman.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { DataPengirimanDto, UpdateDataPengirimanDto } from './dto/data-pengiriman.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('data-pengiriman')
 export class DataPengirimanController {
@@ -47,5 +48,12 @@ export class DataPengirimanController {
     @Patch(':id/update/status-pembayaran')
     async updateStatusPembayaran(@Param('id') id: string) {
         return await this.dataPengiriman.updateStatusPembayaran(id);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('import/excel')
+    @UseInterceptors(FileInterceptor('file'))
+    async importData(@UploadedFile() file: Express.Multer.File) {
+        return this.dataPengiriman.importExcel(file);
     }
 }
