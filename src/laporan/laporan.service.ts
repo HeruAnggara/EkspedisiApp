@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class LaporanService {
     constructor(private prisma: PrismaService) {}
 
-    async labaRugi(start: string, end: string) {
+    async labaRugi(start: Date, end: Date) {
         const startDate = start ? new Date(start) : new Date();
         const endDate = end ? new Date(end) : new Date();
 
@@ -71,7 +71,7 @@ export class LaporanService {
         }
     }
 
-    async transaksiHarian(start: string, end: string) {
+    async transaksiHarian(start: Date, end: Date) {
         const startDate = start ? new Date(start) : new Date();
         const endDate = end ? new Date(end) : new Date();
 

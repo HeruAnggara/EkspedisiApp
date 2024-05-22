@@ -7,13 +7,13 @@ export class LaporanController {
     constructor(private laporan: LaporanService) {}
 
     @UseGuards(JwtAuthGuard)
-    @Get('laba-rugi/:start/:end')
+    @Get('laba-rugi')
     async labaRugi(@Query('start') start: string, @Query('end') end: string) {
         return await this.laporan.labaRugi(start, end);
     }
     @UseGuards(JwtAuthGuard)
-    @Get('transaksi-harian/:start/:end')
-    async transaksiHarian(@Query('start') start: string, @Query('end') end: string) {
+    @Get('transaksi-harian')
+    async transaksiHarian(@Query('start') start: Date, @Query('end') end: Date) {
         return await this.laporan.transaksiHarian(start, end);
     }
     
