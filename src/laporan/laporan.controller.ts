@@ -8,7 +8,7 @@ export class LaporanController {
 
     @UseGuards(JwtAuthGuard)
     @Get('laba-rugi')
-    async labaRugi(@Query('start') start: string, @Query('end') end: string) {
+    async labaRugi(@Query('start') start: Date, @Query('end') end: Date) {
         return await this.laporan.labaRugi(start, end);
     }
     @UseGuards(JwtAuthGuard)
