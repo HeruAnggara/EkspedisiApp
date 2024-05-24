@@ -1,58 +1,72 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
+import { Response } from 'express';
+import PdfPrinter = require("pdfmake");
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class LaporanService {
     constructor(private prisma: PrismaService) {}
 
+    private async getTotalPengiriman(startDate: Date, endDate: Date) {
+        const pengiriman = await this.prisma.dataPengiriman.aggregate({
+            _sum: {
+                ongkir: true,
+                komisi: true
+            },
+            where: {
+                tglTransaksi: {
+                    gte: startDate,
+                    lte: endDate
+                }
+            }
+        });
+    
+        return Math.floor(pengiriman._sum.ongkir + pengiriman._sum.komisi);
+    }
+
+    private async getTotalPemasukkan(startDate: Date, endDate: Date) {
+        let pemasukkan = await this.prisma.pemasukkanLain.aggregate({
+            _sum: {
+                harga: true,
+                komisi: true
+            },
+            where: {
+                tanggalTransaksi: {
+                    gte: startDate,
+                    lte: endDate
+                }
+            }
+        })
+    
+        return Math.floor(pemasukkan._sum.harga + pemasukkan._sum.komisi);
+    }
+    
+    private async getTotalPengeluaran(startDate: Date, endDate: Date) {
+        let pengeluaran = await this.prisma.daftarPengeluaran.aggregate({
+            _sum: {
+                jumlahPembayaran: true,
+            },
+            where: {
+                created_at: {
+                    gte: startDate,
+                    lte: endDate
+                }
+            }
+        })
+    
+        return Math.floor(pengeluaran._sum.jumlahPembayaran);
+    }
+
     async labaRugi(start: Date, end: Date) {
         const startDate = start ? new Date(start) : new Date();
         const endDate = end ? new Date(end) : new Date();
 
         try {
-            let pengiriman = await this.prisma.dataPengiriman.aggregate({
-                _sum: {
-                    ongkir: true,
-                    komisi: true
-                },
-                where: {
-                    tglTransaksi: {
-                        gte: startDate,
-                        lte: endDate
-                    }
-                }                
-            })
+            const totalPengiriman = await this.getTotalPengiriman(startDate, endDate);
 
-            const totalPengiriman = Math.floor(pengiriman._sum.ongkir + pengiriman._sum.komisi)
+            const totalPemasukkan = await this.getTotalPemasukkan(startDate, endDate);
 
-            let pemasukkan = await this.prisma.pemasukkanLain.aggregate({
-                _sum: {
-                    harga: true,
-                    komisi: true
-                },
-                where: {
-                    tanggalTransaksi: {
-                        gte: startDate,
-                        lte: endDate
-                    }
-                }
-            })
-
-            const totalPemasukkan = Math.floor(pemasukkan._sum.harga + pemasukkan._sum.komisi)
-
-            let pengeluaran = await this.prisma.daftarPengeluaran.aggregate({
-                _sum: {
-                    jumlahPembayaran: true,
-                },
-                where: {
-                    created_at: {
-                        gte: startDate,
-                        lte: endDate
-                    }
-                }
-            })
-
-            const totalPengeluaran = Math.floor(pengeluaran._sum.jumlahPembayaran)
+            const totalPengeluaran = await this.getTotalPengeluaran(startDate, endDate);
 
             return {
                 statusCode: HttpStatus.OK,
@@ -118,5 +132,78 @@ export class LaporanService {
                 message: error.message
             }
         }
+    }
+
+    async exportLabaRugi(res: Response, start: Date, end: Date) {
+        const startDate = start ? new Date(start) : new Date();
+        const endDate = end ? new Date(end) : new Date();
+
+        const title = 'Laporan Laba Rugi'
+        const waktuCetak = new Date().toLocaleString();
+        const jumlahPengiriman = 'Jumlah Pengiriman: ' + await this.getTotalPengiriman(startDate, endDate);
+        const jumlahPemasukkan = 'Jumlah Pemasukkan: ' + await this.getTotalPemasukkan(startDate, endDate);
+        const jumlahPengeluaran = 'Jumlah Pengeluaran: ' + await this.getTotalPengeluaran(startDate, endDate);
+
+        try {
+            var dd = {
+                content: [
+                    {
+                        text: title,
+                        style: 'header'
+                    },
+                    `Dicetak Pada: ${waktuCetak}`,
+                    {
+                        text: jumlahPengiriman,
+                        style: 'subheader'
+                    },
+                    {
+                        text: jumlahPemasukkan,
+                        style: 'subheader'
+                    },
+                    {
+                        text: jumlahPengeluaran,
+                        style: 'subheader'
+                    }
+                ],
+                styles: {
+                    header: {
+                        fontSize: 18,
+                        bold: true,
+                    },
+                    subheader: {
+                        fontSize: 15,
+                        bold: true
+                    },
+                    quote: {
+                        italics: true
+                    },
+                    small: {
+                        fontSize: 8
+                    }
+                }
+                
+            }
+          
+            const fonts = {
+                Roboto: {
+                  normal: 'fonts/Roboto-Regular.ttf',
+                  bold: 'fonts/Roboto-Medium.ttf',
+                  italics: 'fonts/Roboto-Italic.ttf',
+                  bolditalics: 'fonts/Roboto-MediumItalic.ttf',
+                }
+              };
+          
+            const printer = new PdfPrinter(fonts);
+            const pdfDoc = printer.createPdfKitDocument(dd);
+            res.setHeader('Content-Type', 'application/pdf');
+            pdfDoc.pipe(res);
+            pdfDoc.end();
+        } catch (error) {
+            console.log(error.message);
+            return {
+                statusCode: HttpStatus.BAD_REQUEST,
+                message: error.message
+            };
+        } 
     }
 }
