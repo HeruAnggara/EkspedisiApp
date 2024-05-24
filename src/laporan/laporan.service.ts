@@ -2,6 +2,7 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { Response } from 'express';
 import PdfPrinter = require("pdfmake");
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Alignment, TDocumentDefinitions } from 'pdfmake/interfaces';
 
 @Injectable()
 export class LaporanService {
@@ -145,44 +146,53 @@ export class LaporanService {
         const jumlahPengeluaran = 'Jumlah Pengeluaran: ' + await this.getTotalPengeluaran(startDate, endDate);
 
         try {
-            var dd = {
+            const dd: TDocumentDefinitions = {
                 content: [
                     {
                         text: title,
-                        style: 'header'
-                    },
-                    `Dicetak Pada: ${waktuCetak}`,
-                    {
-                        text: jumlahPengiriman,
-                        style: 'subheader'
+                        style: 'header',
+                        alignment: 'center' as Alignment,
                     },
                     {
-                        text: jumlahPemasukkan,
-                        style: 'subheader'
+                        text: `Dicetak Pada: ${waktuCetak}`,
+                        style: 'subheader',
+                        marginTop: 10,
+                        marginBottom: 20,
+                        bold: false
                     },
                     {
-                        text: jumlahPengeluaran,
-                        style: 'subheader'
-                    }
+                        ul: [
+                            {
+                                text: jumlahPengiriman,
+                                style: 'subheader',
+                                marginBottom: 5
+                            },
+                            {
+                                text: jumlahPemasukkan,
+                                style: 'subheader',
+                                marginBottom: 5
+                            },
+                            {
+                                text: jumlahPengeluaran,
+                                style: 'subheader',
+                                marginBottom: 5
+                            }
+                        ]
+                    },
                 ],
                 styles: {
                     header: {
                         fontSize: 18,
                         bold: true,
+                        margin: [0, 0, 20, 10]
                     },
                     subheader: {
                         fontSize: 15,
-                        bold: true
+                        bold: true,
+                        margin: [20, 0, 20, 0]
                     },
-                    quote: {
-                        italics: true
-                    },
-                    small: {
-                        fontSize: 8
-                    }
                 }
-                
-            }
+            };
           
             const fonts = {
                 Roboto: {
