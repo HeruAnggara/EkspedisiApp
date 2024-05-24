@@ -3,6 +3,7 @@ import { Response } from 'express';
 import PdfPrinter = require("pdfmake");
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Alignment, TDocumentDefinitions } from 'pdfmake/interfaces';
+import moment = require('moment');
 
 @Injectable()
 export class LaporanService {
@@ -140,7 +141,7 @@ export class LaporanService {
         const endDate = end ? new Date(end) : new Date();
 
         const title = 'Laporan Laba Rugi'
-        const waktuCetak = new Date().toLocaleString();
+        const waktuCetak = moment().locale('id').format('DD MMMM YYYY HH:mm:ss');
         const jumlahPengiriman = 'Jumlah Pengiriman: ' + await this.getTotalPengiriman(startDate, endDate);
         const jumlahPemasukkan = 'Jumlah Pemasukkan: ' + await this.getTotalPemasukkan(startDate, endDate);
         const jumlahPengeluaran = 'Jumlah Pengeluaran: ' + await this.getTotalPengeluaran(startDate, endDate);
