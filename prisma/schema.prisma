@@ -29,6 +29,7 @@ model User {
 
 model Level {
   Users User[]
+  MenuPermission MenuPermission[]
   id    Int    @id @default(autoincrement())
   kode  Int    @db.Int()
   level String @db.VarChar(255)
@@ -167,3 +168,33 @@ model JenisPengiriman {
   updated_at DateTime @updatedAt() @db.Timestamp(6)
 }
 
+model MasterMenu {
+  MenuPermission MenuPermission[]
+  id String @id @default(uuid())
+  parentId Int @default(0)
+  nameMenu String @db.VarChar(255)
+  icon String @db.VarChar(255)
+  status Boolean @default(false)
+  isDropdown Boolean @default(false)
+  position Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt() @db.Timestamp(6)
+}
+
+model MenuPermission {
+  id String @id @default(uuid())
+  levelId Int
+  Level Level @relation(fields: [levelId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  menuId String
+  MasterMenu MasterMenu @relation(fields: [menuId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt() @db.Timestamp(6)
+}
+
+model KonversiPoint {
+  id String @id @default(uuid())
+  point Int
+  nominal Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt() @db.Timestamp(6)
+}
