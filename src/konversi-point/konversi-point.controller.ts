@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
 import { KonversiPointService } from './konversi-point.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
@@ -13,8 +13,8 @@ export class KonversiPointController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Patch()
-    async update(@Body() nominal: number, @Body() id: string) {
+    @Patch(':id')
+    async update(@Body('nominal') nominal: number, @Param('id') id: string) {
         return await this.KonversiService.update(nominal, id);
     }
 }
