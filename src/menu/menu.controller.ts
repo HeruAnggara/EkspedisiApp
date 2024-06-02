@@ -13,8 +13,8 @@ export class MenuController {
     }
     
     @UseGuards(JwtAuthGuard)
-    @Post(':levelId/change-permission')
-    async changePermission(@Param('levelId') levelId: number, @Body() menuId: string) {
+    @Post('change-permission')
+    async changePermission(@Body('levelId') levelId: number, @Body('menuId') menuId: [string]) {
         return this.menuService.changePermission(levelId, menuId);
     }
 

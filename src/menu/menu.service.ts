@@ -55,31 +55,43 @@ export class MenuService {
         }
     }
 
-    async changePermission(levelId: number, menuId: string) {
-        const menu = await this.prisma.menuPermission.findFirst({
-          where: {
-            levelId: levelId,
-          }
-        });
-        try {
-            if (menu) {
-              await this.prisma.menuPermission.delete({
-                where: {
-                  id: menu.id
-                }
-              })
-            }
+    async changePermission(levelId: number, menuId: [string]) {
 
-            const menus = [];
-            for (let index = 0; index < menus.length; index++) {
-              const item = menus[index];
-              await this.prisma.menuPermission.create({
-                data: {
+        const menus = await this.prisma.masterMenu.findMany();
+        const checkMenu = await Promise.all(
+          menuId.map(element =>
+            this.prisma.menuPermission.findMany({
+              where: {
+                levelId: levelId,
+                menuId: element,
+              },
+            })
+          )
+        );
+
+        const flatCheckMenu = checkMenu.flat();
+        try {
+            if (flatCheckMenu.length > 0) {              
+              await this.prisma.menuPermission.deleteMany({
+                where: {
                   levelId: levelId,
-                  menuId: item
-                }
-              })
-            }
+                  menuId: {
+                    in: menuId,
+                  },
+                },
+              });
+            } else {
+              await Promise.all(
+                menuId.map(element =>
+                  this.prisma.menuPermission.create({
+                    data: {
+                      levelId: levelId,
+                      menuId: element,
+                    },
+                  })
+                )
+              );
+            }            
 
             return {
               statusCode: HttpStatus.CREATED,
