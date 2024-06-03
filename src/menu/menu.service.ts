@@ -106,7 +106,29 @@ export class MenuService {
     }
 
     async updatePositionMenu(position: number, menuId: string) {
+        const firstMenu = await this.prisma.masterMenu.findFirst({
+          where: {
+            id: menuId,
+          }
+        })
+
+        const secondMenu = await this.prisma.masterMenu.findFirst({
+          where: {
+            position: position,
+            parentId: 0
+          }
+        })
+
         try {
+            await this.prisma.masterMenu.update({
+              where: {
+                id: secondMenu.id
+              },
+              data: {
+                position: firstMenu.position
+              }
+            })
+
             await this.prisma.masterMenu.update({
               where: {
                 id: menuId
