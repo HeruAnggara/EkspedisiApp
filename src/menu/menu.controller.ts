@@ -20,7 +20,7 @@ export class MenuController {
 
     @UseGuards(JwtAuthGuard)
     @Patch('update-position')
-    async updatePositionMenu(@Body('position') position: number, @Body() menuId: string) {
+    async updatePositionMenu(@Body('position') position: number, @Body('menuId') menuId: string) {
         return this.menuService.updatePositionMenu(position, menuId);
     }
 }
