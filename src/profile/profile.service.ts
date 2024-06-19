@@ -9,7 +9,16 @@ export class ProfileService {
 
     async index(id: string) {
         const user = await this.prisma.user.findFirst({
-            where: {id: id}
+            where: {id: id},
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                no_wa: true,
+                alamat: true,
+                created_at: true,
+                Level: true,
+            }
         })
 
         if (!user) {
