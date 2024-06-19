@@ -47,7 +47,7 @@ export class ProfileService {
             throw new HttpException(`Data User Tidak ditemukan`, HttpStatus.NOT_FOUND);
         }
 
-        if (data.password) {
+        if (data.password && data.password !== "") {
             const differentPassword = await compare(
                 data.password,
                 user.password,
@@ -69,7 +69,7 @@ export class ProfileService {
         }
 
         try {
-            const userPassword = data.password ? await hash(data.password, 12) : user.password ;
+            const userPassword = data.password && data.password !== "" ? await hash(data.password, 12) : user.password ;
             
             await this.prisma.user.update({
                 where: { id: id },
