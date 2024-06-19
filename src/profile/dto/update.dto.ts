@@ -1,9 +1,8 @@
-import { IsString, IsNotEmpty, IsEmail, MinLength, MaxLength, Matches } from "class-validator";
+import { IsString, IsNotEmpty, IsEmail, MinLength, MaxLength, Matches, IsOptional } from "class-validator";
 
 export class UpdateDto {
   
   @IsNotEmpty()
-  @IsEmail()
   name: string;
 
   @IsNotEmpty()
@@ -16,16 +15,15 @@ export class UpdateDto {
 
   @IsNotEmpty()
   @IsString()
-  alamat
+  alamat: string
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   @MinLength(6)
   @MaxLength(20)
   @Matches(/^(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/)
   password: string;
 
-  @IsNotEmpty()
   oldPassword: string;
 
   @IsNotEmpty()
