@@ -47,20 +47,29 @@ export class ProfileService {
             throw new HttpException(`Data User Tidak ditemukan`, HttpStatus.NOT_FOUND);
         }
 
-        const checkPassword = await compare(
-            data.oldPassword,
-            user.password,
-        );
-                
-        if (!checkPassword) {
-          throw new HttpException(
-            'Password Sebelumnya Yang Anda Masukkan Tidak Cocok',
-            HttpStatus.BAD_REQUEST,
-          );
+        if (data.password) {
+            const differentPassword = await compare(
+                data.password,
+                user.password,
+            );
+    
+            if (!differentPassword) {
+                const checkPassword = await compare(
+                    data.oldPassword,
+                    user.password,
+                );
+        
+                if (!checkPassword) {
+                  throw new HttpException(
+                    'Password Sebelumnya Yang Anda Masukkan Tidak Cocok',
+                    HttpStatus.BAD_REQUEST,
+                  );
+                }
+            }
         }
 
         try {
-            data.password = await hash(data.password, 12);
+            const userPassword = data.password ? await hash(data.password, 12) : user.password ;
             
             await this.prisma.user.update({
                 where: { id: id },
@@ -69,7 +78,7 @@ export class ProfileService {
                     email: data.email,
                     no_wa: data.no_wa,
                     alamat: data.alamat,
-                    password: data.password,
+                    password: userPassword,
                     levelId: data.levelId
                   }
             });
