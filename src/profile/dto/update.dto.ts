@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsEmail, MinLength, MaxLength, Matches, IsOptional } from "class-validator";
+import { IsString, IsNotEmpty, IsEmail, MinLength, MaxLength, Matches, IsOptional, ValidateIf } from "class-validator";
 
 export class UpdateDto {
   
@@ -19,11 +19,14 @@ export class UpdateDto {
 
   @IsOptional()
   @IsString()
+  @ValidateIf(o => o.password !== '' && o.password !== undefined)
   @MinLength(6)
   @MaxLength(20)
   @Matches(/^(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/)
   password: string;
 
+  @IsOptional()
+  @IsString()
   oldPassword: string;
 
   @IsNotEmpty()
