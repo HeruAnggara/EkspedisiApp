@@ -43,7 +43,17 @@ export class UsersService {
   
     async read() {
       try {
-        const users = await this.prisma.user.findMany();
+        const users = await this.prisma.user.findMany({
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            no_wa: true,
+            alamat: true,
+            levelId: true,
+            Level: true
+          }
+        });
 
         return {
           statusCode: HttpStatus.OK,
