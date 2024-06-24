@@ -3,7 +3,6 @@ import { IsString, IsNotEmpty, IsEmail, MinLength, MaxLength, Matches } from "cl
 export class CreateDto {
   
   @IsNotEmpty()
-  @IsEmail()
   name: string;
 
   @IsNotEmpty()
