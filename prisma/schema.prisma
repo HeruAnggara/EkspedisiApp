@@ -198,3 +198,12 @@ model KonversiPoint {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt() @db.Timestamp(6)
 }
+
+model Merchandise {
+  id String @id @default(uuid())
+  nama String
+  nilai Int
+  gambar String @db.Text()
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt() @db.Timestamp(6)
+}
