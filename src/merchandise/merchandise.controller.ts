@@ -12,42 +12,42 @@ export class MerchandiseController {
     constructor (private merchandise: MerchandiseService) {}
 
     @UseGuards(JwtAuthGuard)
-    @UseInterceptors(
-        FileInterceptor('gambar', {
-          storage: diskStorage({
-            destination: 'public/uploads/merchandise',
-            filename: (req, file, cb) => {
-              const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-              cb(null, uniqueSuffix + extname(file.originalname));
-            },
-          }),
-          fileFilter: (req, file, cb) => {
-            const allowedExtensions = ['.jpeg', '.png', '.jpg'];
-            const maxSize = 2 * 1024 * 1024; // 2MB
+    // @UseInterceptors(
+    //     FileInterceptor('gambar', {
+    //       storage: diskStorage({
+    //         destination: 'public/uploads/merchandise',
+    //         filename: (req, file, cb) => {
+    //           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    //           cb(null, uniqueSuffix + extname(file.originalname));
+    //         },
+    //       }),
+    //       fileFilter: (req, file, cb) => {
+    //         const allowedExtensions = ['.jpeg', '.png', '.jpg'];
+    //         const maxSize = 2 * 1024 * 1024; // 2MB
 
-            const fileExtension = extname(file.originalname).toLowerCase();
-            if (!allowedExtensions.includes(fileExtension)) {
-              return cb(new Error('Only JPEG, PNG, or JPG files are allowed'), false);
-            }
+    //         const fileExtension = extname(file.originalname).toLowerCase();
+    //         if (!allowedExtensions.includes(fileExtension)) {
+    //           return cb(new Error('Only JPEG, PNG, or JPG files are allowed'), false);
+    //         }
 
-            if (file.size > maxSize) {
-              return cb(new Error('File size cannot exceed 2 MB'), false);
-            }
+    //         if (file.size > maxSize) {
+    //           return cb(new Error('File size cannot exceed 2 MB'), false);
+    //         }
 
-            cb(null, true);
-          }
-        }),
-      )
+    //         cb(null, true);
+    //       }
+    //     }),
+    //   )
     @Post()
     async create(
         @Body() data: MerchandiseDto, 
         @Req() req,
-        @UploadedFile(new ParseFilePipe({
-            validators: [
-              new MaxFileSizeValidator({ maxSize: 2000000 }),
-              new FileTypeValidator({ fileType: /image\/(jpeg|png|jpg)/ }),
-            ],
-          })) file: Express.Multer.File,
+        // @UploadedFile(new ParseFilePipe({
+        //     validators: [
+        //       new MaxFileSizeValidator({ maxSize: 2000000 }),
+        //       new FileTypeValidator({ fileType: /image\/(jpeg|png|jpg)/ }),
+        //     ],
+        //   })) file: Express.Multer.File,
     ) {
         isAdmin(req.user.levelId);
         return await this.merchandise.create(data);
@@ -60,43 +60,43 @@ export class MerchandiseController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @UseInterceptors(
-        FileInterceptor('gambar', {
-          storage: diskStorage({
-            destination: 'public/uploads/merchandise',
-            filename: (req, file, cb) => {
-              const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-              cb(null, uniqueSuffix + extname(file.originalname));
-            },
-          }),
-          fileFilter: (req, file, cb) => {
-            const allowedExtensions = ['.jpeg', '.png', '.jpg'];
-            const maxSize = 2 * 1024 * 1024; // 2MB
+    // @UseInterceptors(
+    //     FileInterceptor('gambar', {
+    //       storage: diskStorage({
+    //         destination: 'public/uploads/merchandise',
+    //         filename: (req, file, cb) => {
+    //           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    //           cb(null, uniqueSuffix + extname(file.originalname));
+    //         },
+    //       }),
+    //       fileFilter: (req, file, cb) => {
+    //         const allowedExtensions = ['.jpeg', '.png', '.jpg'];
+    //         const maxSize = 2 * 1024 * 1024; // 2MB
 
-            const fileExtension = extname(file.originalname).toLowerCase();
-            if (!allowedExtensions.includes(fileExtension)) {
-              return cb(new Error('Only JPEG, PNG, or JPG files are allowed'), false);
-            }
+    //         const fileExtension = extname(file.originalname).toLowerCase();
+    //         if (!allowedExtensions.includes(fileExtension)) {
+    //           return cb(new Error('Only JPEG, PNG, or JPG files are allowed'), false);
+    //         }
 
-            if (file.size > maxSize) {
-              return cb(new Error('File size cannot exceed 2 MB'), false);
-            }
+    //         if (file.size > maxSize) {
+    //           return cb(new Error('File size cannot exceed 2 MB'), false);
+    //         }
             
-            cb(null, true);
-          }
-        }),
-      )
+    //         cb(null, true);
+    //       }
+    //     }),
+    //   )
     @Put(':id/update')
     async update(
         @Body() data: MerchandiseDto, 
         @Param('id') id: string, 
         @Req() req,
-        @UploadedFile(new ParseFilePipe({
-            validators: [
-              new MaxFileSizeValidator({ maxSize: 2000000 }),
-              new FileTypeValidator({ fileType: /image\/(jpeg|png|jpg)/ }),
-            ],
-          })) file: Express.Multer.File
+        // @UploadedFile(new ParseFilePipe({
+        //     validators: [
+        //       new MaxFileSizeValidator({ maxSize: 2000000 }),
+        //       new FileTypeValidator({ fileType: /image\/(jpeg|png|jpg)/ }),
+        //     ],
+        //   })) file: Express.Multer.File
     ) {
         isAdmin(req.user.levelId);
         return await this.merchandise.update(data, id);
