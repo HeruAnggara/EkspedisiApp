@@ -207,3 +207,11 @@ model Merchandise {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt() @db.Timestamp(6)
 }
+
+model Bank {
+  id String @id @default(uuid())
+  namaBank String @db.VarChar(15)
+  cabang String @db.VarChar(30)
+  noRekening String @db.VarChar(30)
+  namaPemilik String @db.VarChar(30)
+}
