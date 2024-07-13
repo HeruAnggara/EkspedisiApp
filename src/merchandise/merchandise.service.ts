@@ -57,9 +57,9 @@ export class MerchandiseService {
     async update(data: MerchandiseDto, id: string) {
         const detail = await this.findMerchandiseById(id);
 
-        const filePath = `public/uploads/image/${detail.gambar}`;
+        // const filePath = `public/uploads/image/${detail.gambar}`;
         
-        await fs.promises.unlink(filePath);  
+        // await fs.promises.unlink(filePath);  
 
         await this.prisma.merchandise.update({
             where: { id: id },
@@ -88,9 +88,9 @@ export class MerchandiseService {
 
         try {
 
-            const filePath = `public/uploads/image/${detail.gambar}`;
+            // const filePath = `public/uploads/image/${detail.gambar}`;
         
-            await fs.promises.unlink(filePath);  
+            // await fs.promises.unlink(filePath);  
             
             return {
                 statusCode: HttpStatus.OK,
