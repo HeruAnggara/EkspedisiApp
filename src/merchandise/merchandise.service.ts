@@ -20,11 +20,11 @@ export class MerchandiseService {
     }
 
     async create(data: MerchandiseDto) {
-        await this.prisma.merchandise.create({
-            data: data
-        })
-
         try {
+            await this.prisma.merchandise.create({
+                data: data
+            })
+            
             return {
                 statusCode: HttpStatus.CREATED,
                 message: 'Data Merchandise Berhasil Dibuat'
@@ -38,11 +38,11 @@ export class MerchandiseService {
     }
 
     async read() {
-        const data = await this.prisma.merchandise.findMany();
-
         try {
+            const data = await this.prisma.merchandise.findMany();
+
             return {
-                statusCode: HttpStatus.CREATED,
+                statusCode: HttpStatus.OK,
                 message: 'List Data Merchandise',
                 data: data
             }
@@ -55,18 +55,18 @@ export class MerchandiseService {
     }
 
     async update(data: MerchandiseDto, id: string) {
-        const detail = await this.findMerchandiseById(id);
-
-        // const filePath = `public/uploads/image/${detail.gambar}`;
-        
-        // await fs.promises.unlink(filePath);  
-
-        await this.prisma.merchandise.update({
-            where: { id: id },
-            data: data
-        })
-
         try {
+            const detail = await this.findMerchandiseById(id);
+
+            // const filePath = `public/uploads/image/${detail.gambar}`;
+            
+            // await fs.promises.unlink(filePath);  
+
+            await this.prisma.merchandise.update({
+                where: { id: id },
+                data: data
+            })
+
             return {
                 statusCode: HttpStatus.OK,
                 message: 'Data Merchandise Berhasil Diperbarui'
@@ -80,13 +80,13 @@ export class MerchandiseService {
     }
 
     async delete(id: string) {
-        const detail = await this.findMerchandiseById(id);
-
-        await this.prisma.merchandise.delete({
-            where: { id: id}
-        })
-
         try {
+
+            const detail = await this.findMerchandiseById(id);
+
+            await this.prisma.merchandise.delete({
+                where: { id: id}
+            })
 
             // const filePath = `public/uploads/image/${detail.gambar}`;
         
@@ -104,12 +104,12 @@ export class MerchandiseService {
         }
     }
 
-    async detail(id: string) {
-        const data = await this.findMerchandiseById(id);
-        
+    async detail(id: string) {        
         try {
+            const data = await this.findMerchandiseById(id);
+
             return {
-                statusCode: HttpStatus.CREATED,
+                statusCode: HttpStatus.OK,
                 message: 'Detail Data Merchandise',
                 data: data
             }
