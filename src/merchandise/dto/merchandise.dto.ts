@@ -9,7 +9,7 @@ export class MerchandiseDto {
     @IsNumber()
     nilai: number
 
-    @IsNotEmpty()
-    @IsString()
+    // @IsNotEmpty()
+    // @IsString()
     gambar: string
 }
