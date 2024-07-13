@@ -18,9 +18,10 @@ import { LaporanModule } from './laporan/laporan.module';
 import { KonversiPointModule } from './konversi-point/konversi-point.module';
 import { MenuModule } from './menu/menu.module';
 import { MerchandiseModule } from './merchandise/merchandise.module';
+import { BankModule } from './bank/bank.module';
 
 @Module({
-  imports: [AuthModule, UsersModule, PrismaModule, ProfileModule, JenisPengeluaranModule, PerlengkapanModule, SupplierModule, DaftarPengeluaranModule, PemasukanLainModule, PembelianPerlengkapanModule, CustomerModule, DataPengirimanModule, LaporanModule, KonversiPointModule, MenuModule, MerchandiseModule],
+  imports: [AuthModule, UsersModule, PrismaModule, ProfileModule, JenisPengeluaranModule, PerlengkapanModule, SupplierModule, DaftarPengeluaranModule, PemasukanLainModule, PembelianPerlengkapanModule, CustomerModule, DataPengirimanModule, LaporanModule, KonversiPointModule, MenuModule, MerchandiseModule, BankModule],
   controllers: [AppController, UsersController],
   providers: [AppService],
 })
