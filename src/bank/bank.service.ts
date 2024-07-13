@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { BankDto } from './dto/bank.dto';
 
 @Injectable()
@@ -19,11 +19,11 @@ export class BankService {
     }
 
     async create(data: BankDto) {
-        await this.prisma.bank.create({
-            data
-        })
-
         try {
+            await this.prisma.bank.create({
+                data
+            })
+
             return {
                 statusCode: HttpStatus.CREATED,
                 message: 'Data Bank Berhasil Dibuat'
@@ -37,11 +37,11 @@ export class BankService {
     }
 
     async read() {
-        const data = await this.prisma.bank.findMany();
-
         try {
+            const data = await this.prisma.bank.findMany();
+
             return {
-                statusCode: HttpStatus.CREATED,
+                statusCode: HttpStatus.OK,
                 message: 'List Data Bank',
                 data: data
             }
@@ -56,12 +56,13 @@ export class BankService {
     async update(data: BankDto, id: string) {
         const detail = await this.findBankById(id);
 
-        await this.prisma.bank.update({
-            where: { id: id },
-            data: data
-        })
-
         try {
+
+            await this.prisma.bank.update({
+                where: { id: id },
+                data: data
+            })
+
             return {
                 statusCode: HttpStatus.OK,
                 message: 'Data Bank Berhasil Diperbarui'
@@ -94,12 +95,12 @@ export class BankService {
         }
     }
 
-    async detail(id: string) {
-        const data = await this.findBankById(id);
-        
+    async detail(id: string) {        
         try {
+            const data = await this.findBankById(id);
+
             return {
-                statusCode: HttpStatus.CREATED,
+                statusCode: HttpStatus.OK,
                 message: 'Detail Data Bank',
                 data: data
             }
