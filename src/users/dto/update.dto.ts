@@ -19,5 +19,9 @@ export class UpdateDto {
 
   @IsNotEmpty()
   levelId: number
+
+  @IsNotEmpty()
+  @IsString()
+  username: string;
   
 }
