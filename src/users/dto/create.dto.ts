@@ -29,5 +29,9 @@ export class CreateDto {
 
   @IsNotEmpty()
   levelId: number
+
+  @IsNotEmpty()
+  @IsString()
+  username: string;
   
 }
