@@ -25,7 +25,8 @@ export class UsersService {
             no_wa: data.no_wa,
             alamat: data.alamat,
             password: data.password,
-            levelId: data.levelId
+            levelId: data.levelId, 
+            username: data.username
           }
         })
 
@@ -51,6 +52,7 @@ export class UsersService {
             no_wa: true,
             alamat: true,
             levelId: true,
+            username: true,
             Level: true
           }
         });
@@ -130,6 +132,7 @@ export class UsersService {
           email: true,
           no_wa: true,
           alamat: true,
+          username: true,
           Level: {
             select: {
               level: true
