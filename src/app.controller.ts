@@ -26,4 +26,16 @@ export class AppController {
     const user = req.user
     return user;
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('jenis-pengiriman')
+  async getJenisPengiriman() {
+    return await this.appService.getJenisPengiriman();
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Get('status-pengiriman')
+  async getStatusPengiriman() {
+    return await this.appService.getStatusPengiriman();
+  }
 }
