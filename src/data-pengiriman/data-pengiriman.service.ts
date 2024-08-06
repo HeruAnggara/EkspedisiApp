@@ -195,7 +195,7 @@ export class DataPengirimanService {
         const worksheet = workbook.Sheets[sheetName];
         const data = XLSX.utils.sheet_to_json(worksheet);
 
-        await this.validateImportedData(data);
+        // await this.validateImportedData(data);
     
         const results = [];
     
@@ -213,9 +213,9 @@ export class DataPengirimanService {
     
             item.jenisPengiriman = jenis.id;
             item.statusPengiriman = status.id;
-            item.noWaPengirim = '0' + item.noWaPengirim.toString();
-            item.noWaPenerima = '0' + item.noWaPenerima.toString();
-            item.tglTransaksi = new Date((item.tglTransaksi + 1) * 24 * 60 * 60 * 1000 + new Date('1899-12-30').getTime()).toISOString();
+            item.noWaPengirim = `0${item.noWaPengirim}`;
+            item.noWaPenerima = `0${item.noWaPenerima}`;
+            item.tglTransaksi = new Date((item.tglTransaksi + 1) * 24 * 60 * 60 * 1000 + new Date('1899-12-30').getTime());
             item.bawaSendiri = item.bawaSendiri == 'ya';
             item.statusPembayaran = item.metodePembayaran === 'Tunai' ? 1 : 2;
     
@@ -228,7 +228,7 @@ export class DataPengirimanService {
                 const createdData = await this.prisma.dataPengiriman.create({
                     data: newData
                 });
-                results.push(createdData);
+                results.push(newData);
             } catch (error) {
                 console.log(error.message);
 
