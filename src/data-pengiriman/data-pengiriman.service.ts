@@ -213,9 +213,9 @@ export class DataPengirimanService {
     
             item.jenisPengiriman = jenis.id;
             item.statusPengiriman = status.id;
-            item.noWaPengirim = `0${item.noWaPengirim}`;
-            item.noWaPenerima = `0${item.noWaPenerima}`;
-            item.tglTransaksi = new Date((item.tglTransaksi + 1) * 24 * 60 * 60 * 1000 + new Date('1899-12-30').getTime());
+            item.noWaPengirim = `0${item.no_hp_pengirim}`;
+            item.noWaPenerima = `0${item.no_hp_penerima}`;
+            item.tglTransaksi = new Date((item.tgl_transaksi + 1) * 24 * 60 * 60 * 1000 + new Date('1899-12-30').getTime());
             item.bawaSendiri = item.bawaSendiri == 'ya';
             item.statusPembayaran = item.metodePembayaran === 'Tunai' ? 1 : 2;
     
