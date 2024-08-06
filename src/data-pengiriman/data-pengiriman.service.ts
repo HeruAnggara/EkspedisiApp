@@ -202,10 +202,10 @@ export class DataPengirimanService {
         for (const item of data as any[]) {
             // const dataPengiriman = new DataPengirimanDto();
             const jenis = await this.prisma.jenisPengiriman.findFirst({
-                where: { jenisPengiriman: item.jenisPengiriman }
+                where: { jenisPengiriman: item.jenis_pengiriman }
             });
             const status = await this.prisma.statusPengiriman.findFirst({
-                where: { statusPengiriman: item.statusPengiriman }
+                where: { statusPengiriman: item.status_pengiriman }
             });
             if (!jenis || !status) {
                 throw new HttpException('Jenis atau Status Pengiriman Tidak Ditemukan', HttpStatus.NOT_FOUND);
@@ -224,9 +224,27 @@ export class DataPengirimanService {
             };
     
             try {
-            
                 const createdData = await this.prisma.dataPengiriman.create({
-                    data: newData
+                    data: {
+                        noResi: item.no_resi,
+                        tglTransaksi : item.tglTransaksi,
+                        namaPengirim : item.nama_pengirim,
+                        noWaPengirim : item.noWaPengirim,
+                        namaPenerima : item.nama_penerima,
+                        noWaPenerima : item.noWaPenerima,
+                        kota_tujuan : item.kota_tujuan,
+                        beratBarang : item.berat_barang,
+                        ongkir : item.ongkir,
+                        komisi : item.komisi,
+                        statusPembayaran : (item.metode_pembayaran).toLowerCase() == 'tunai' ? 1 : 2,
+                        metodePembayaran : item.metode_pembayaran,
+                        bank : item.bank ?? '-',
+                        buktiPembayaran : item.bukti_pembayaran ?? '-',
+                        jenisPengiriman : item.jenisPengiriman,
+                        bawaSendiri : (item.bawa_sendiri).toLowerCase() == 'Ya' ?  true: false,
+                        statusPengiriman : item.statusPengiriman,
+                        keterangan : item.keterangan ?? '-',
+                    }
                 });
                 results.push(newData);
             } catch (error) {
