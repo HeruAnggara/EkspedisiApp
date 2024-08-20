@@ -54,12 +54,12 @@ export class DataPengirimanController {
     @Post('import/excel')
     @UseInterceptors(FileInterceptor('file'))
     async importData(@UploadedFile() file: Express.Multer.File) {
-        return this.dataPengiriman.importExcel(file);
+        return await this.dataPengiriman.importExcel(file);
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('status-pengiriman/export')
     async exportData() {
-        return this.dataPengiriman.dataStatusPengiriman();
+        return await this.dataPengiriman.dataStatusPengiriman();
     }
 }
