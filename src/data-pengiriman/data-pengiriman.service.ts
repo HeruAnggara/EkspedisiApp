@@ -60,7 +60,31 @@ export class DataPengirimanService {
 
     async read() {
         try {
-            const data = await this.prisma.dataPengiriman.findMany()
+            const data = await this.prisma.dataPengiriman.findMany({
+                select: {
+                    id: true,
+                    noResi: true,
+                    namaPengirim: true,
+                    noWaPengirim: true,
+                    namaPenerima: true,
+                    noWaPenerima: true,
+                    kota_tujuan: true,
+                    beratBarang: true,
+                    ongkir: true,
+                    komisi: true,
+                    metodePembayaran: true,
+                    bank: true,
+                    buktiPembayaran: true,
+                    keterangan: true,
+                    tglTransaksi: true,
+                    bawaSendiri: true,
+                    StatusPengiriman: {
+                        select: {
+                            statusPengiriman: true
+                        }
+                    }
+                }
+            })
 
             return {
                 statusCode: HttpStatus.OK,
@@ -258,6 +282,38 @@ export class DataPengirimanService {
             statusCode: HttpStatus.CREATED,
             message: 'Data Pengiriman Berhasil Diimpor',
         };
+    }
+
+    async dataStatusPengiriman() {
+        try {
+            const data = await this.prisma.dataPengiriman.findMany({
+                where: { StatusPengiriman: {
+                    NOT: {
+                        statusPengiriman: 'HND'
+                    }
+                }},
+                select: {
+                    tglTransaksi: true,
+                    noResi: true,
+                    StatusPengiriman: {
+                        select: {
+                            statusPengiriman: true
+                        }
+                    }
+                }
+            });
+
+            return {
+                statusCode: HttpStatus.OK,
+                message: 'List Data Status Pengiriman Terbaru',
+                data: data
+            }
+        } catch (error) {
+            return {
+                statusCode: HttpStatus.BAD_REQUEST,
+                message: error.message
+            }
+        }
     }
 
     async validateImportedData(data: any[]) {
