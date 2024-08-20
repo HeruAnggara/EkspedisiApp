@@ -58,7 +58,7 @@ export class DataPengirimanController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get('export')
+    @Get('status-pengiriman/export')
     async exportData() {
         return this.dataPengiriman.dataStatusPengiriman();
     }
