@@ -19,9 +19,24 @@ import { KonversiPointModule } from './konversi-point/konversi-point.module';
 import { MenuModule } from './menu/menu.module';
 import { MerchandiseModule } from './merchandise/merchandise.module';
 import { BankModule } from './bank/bank.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
 @Module({
-  imports: [AuthModule, UsersModule, PrismaModule, ProfileModule, JenisPengeluaranModule, PerlengkapanModule, SupplierModule, DaftarPengeluaranModule, PemasukanLainModule, PembelianPerlengkapanModule, CustomerModule, DataPengirimanModule, LaporanModule, KonversiPointModule, MenuModule, MerchandiseModule, BankModule],
+  imports: [AuthModule, UsersModule, PrismaModule, ProfileModule, JenisPengeluaranModule, PerlengkapanModule, SupplierModule, DaftarPengeluaranModule, PemasukanLainModule, PembelianPerlengkapanModule, CustomerModule, DataPengirimanModule, LaporanModule, KonversiPointModule, MenuModule, MerchandiseModule, BankModule, 
+    MailerModule.forRoot({
+      transport: 'smtp://localhost:25',
+      defaults: {
+          from: 'noreply@emailsaya.com',
+      },
+      template: {
+          dir: process.cwd() + '/mail',
+          adapter: new HandlebarsAdapter(),
+          options: {
+              strict: false,
+          },
+      },
+  })],
   controllers: [AppController, UsersController],
   providers: [AppService],
 })
