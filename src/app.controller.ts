@@ -38,4 +38,10 @@ export class AppController {
   async getStatusPengiriman() {
     return await this.appService.getStatusPengiriman();
   }
+  
+  @UseGuards(JwtAuthGuard)
+  @Get('send-email')
+  async sendMail() {
+    return await this.appService.testingMail();
+  }
 }
