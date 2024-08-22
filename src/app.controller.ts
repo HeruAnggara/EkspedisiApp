@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AppService } from './app.service';
 import { AuthGuard } from '@nestjs/passport';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { AuthService } from './auth/auth.service';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { LoginDto } from './auth/dto/login.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller()
 export class AppController {
@@ -40,8 +41,9 @@ export class AppController {
   }
   
   @UseGuards(JwtAuthGuard)
-  @Get('send-email')
-  async sendMail() {
-    return await this.appService.testingMail();
+  @Post('send-email')
+  @UseInterceptors(FileInterceptor('file'))
+  async sendMail(@UploadedFile() file: Express.Multer.File) {
+    return await this.appService.testingMail(file);
   }
 }

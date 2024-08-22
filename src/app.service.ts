@@ -1,6 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma.service';
 import { MailerService } from '@nestjs-modules/mailer';
+import * as fs from 'fs';
 
 @Injectable()
 export class AppService {
@@ -44,16 +45,35 @@ export class AppService {
     }
   }
 
-  async testingMail() {
-    this.mail.sendMail({
+  async testingMail(file: Express.Multer.File) {
+    if (!file) {
+      throw new Error('No file uploaded');
+    }
+
+    try {
+      await this.mail.sendMail({
         to: "john@gmail.com",
         subject: `Testing Email Success`,
         template: 'testing',
         context: {
-         name: "John"
+          name: "John"
         },
-    });
+        attachments: [
+          {
+            filename: file.originalname,
+            path: file.path,
+          },
+        ],
+      });
 
-    return  'Success';
+      fs.unlinkSync(file.path);
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Email sent successfully',
+      };
+    } catch (error) {
+      throw new Error(`Failed to send email: ${error.message}`);
+    }
   }
 }
