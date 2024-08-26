@@ -66,8 +66,6 @@ export class AppService {
         ],
       });
 
-      fs.unlinkSync(file.path);
-
       return {
         statusCode: HttpStatus.OK,
         message: 'Email sent successfully',
